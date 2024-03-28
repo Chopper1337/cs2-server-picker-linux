@@ -81,9 +81,6 @@ main() {
     else
         echo "IP addresses not blocked."
     fi
-
-    # Remove the temporary file
-    rm temp.json
 }
 
 # Execute main function with command-line arguments
