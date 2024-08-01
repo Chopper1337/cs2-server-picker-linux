@@ -1,5 +1,12 @@
 #!/bin/bash
 
+deps=( curl jq )
+
+for dep in ${deps[@]}
+do 
+  which $dep || exit
+done
+
 # Function to fetch data from the API endpoint, filter out irrelevant data, and save it to a temporary file
 fetch_data() {
     local API_ENDPOINT="https://api.steampowered.com/ISteamApps/GetSDRConfig/v1/?appid=730"
