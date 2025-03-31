@@ -40,7 +40,6 @@ save_blocked_ips() {
     done
 
     # Save blocked IP addresses to a file named "blocked-ips.txt"
-    echo "Blocked IP addresses:" > blocked-ips.txt
     for ip in "${blocked_ips[@]}"; do
         echo "$ip" >> blocked-ips.txt
     done
@@ -58,8 +57,21 @@ block_ip_addresses() {
     echo "All IP addresses blocked successfully."
 }
 
+unblock_currently_blocked () {
+    echo "Unblocking IP addresses using iptables..."
+    while read -r ip; do
+        sudo iptables -D INPUT -s "$ip" -j DROP
+        # echo "Unblocked IP address: $ip"
+    done < blocked-ips.txt
+    rm ./blocked-ips.txt
+    echo "All IP addresses unblocked successfully."
+}
+
 # Main function
 main() {
+
+    # Unblock any currently blocked servers
+    unblock_currently_blocked
     # Fetch data from API endpoint
     local data=$(fetch_data)
 

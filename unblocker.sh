@@ -7,6 +7,7 @@ unblock_ip_addresses() {
         sudo iptables -D INPUT -s "$ip" -j DROP
         echo "Unblocked IP address: $ip"
     done < blocked-ips.txt
+    rm ./blocked-ips.txt
     echo "All IP addresses unblocked successfully."
 }
 
