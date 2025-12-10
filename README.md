@@ -1,33 +1,58 @@
 # cs2-server-picker-linux
-ChatGPT Pasted CS2 server picker for Linux
 
-Fetches data from the Steam API and blocks IP addresses using `iptables`.
+CS2 server picker for Linux
+
+Fetches data from the Steam API and blocks/unblocks matchmaking server addresses using `iptables`.
 
 ## Usage
 
-### Blocking servers
+### List all available servers
 
-Run `./blocker.sh` and enter countries to block.
+To list all available matchmaking servers:
 
-OR
+```
+./server-picker.sh --list-servers
+```
 
-Run `./blocker.sh` and provide the countries to block as args, like so:
+### List blocked servers
 
-`./blocker.sh lhr ams par fra sto2 vie mad sto waw hel`
+To list of all currently blocked matchmaking servers:
 
-Then say "yes" and enter your password :^)
+```
+./server-picker.sh --list-blocked
+```
 
-**DO NOT DELETE `blocked-ips.txt`**
+### Block servers
 
-### Unblocking servers
+To block matchmaking servers, provide their identifiers as arguments to the `--block` or `-b` option:
 
-Run `./unblocker.sh`.
+```
+./server-picker.sh --block <mm1> <mm2> ...
+```
 
-This will read `blocked-ips.txt` and unblock those addresses.
+For example, to block European servers:
 
-### Finding what you should block
+```
+./server-picker.sh --block lhr ams ams4 par fra sto2 vie mad sto waw hel
+```
 
-If you don't know what you should block, just run CS2, open console, start the queue and wait for it to output something like:
+### Unblock servers
+
+To unblock all previously blocked matchmaking servers:
+
+```
+./server-picker.sh --unblock
+```
+
+### Check ping to servers
+
+1. Start CS2
+2. Enable the developer console in settings if not already enabled
+2. Queue for a match (This will allow the client to fetch server data and perform pings)
+3. Open the developer console and wait for the datacenter ping information to appear (this should only take a few seconds)
+4. Cancel the match search
+
+The console should display ping information similar to the following:
 
 ```
 Obtained direct RTT measurements to relays in 40 POPs.  Closest 15 are:
