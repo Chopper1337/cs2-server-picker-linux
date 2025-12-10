@@ -3,9 +3,9 @@
 # Function to print formatted messages
 echo_fmt() {
 	case $1 in
-	"i") echo -e "\e[32m[INFO]\e[0m $@" ;;
-	"e") echo -e "\e[31m[ERROR]\e[0m $@" ;;
-	*) echo -e "[UNKNOWN] $@" ;;
+	"i") echo -e "\e[32m[INFO]\e[0m $2" ;;
+	"e") echo -e "\e[31m[ERROR]\e[0m $2" ;;
+	*) echo -e "[UNKNOWN] $2" ;;
 	esac
 }
 
