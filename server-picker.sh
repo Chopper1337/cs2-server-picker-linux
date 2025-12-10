@@ -26,7 +26,7 @@ read_data() {
 # Function to parse the JSON data and extract server/region names and IPs in a neat format
 list_servers() {
 	local data=$(read_data)
-	jq -r '.pops | keys[]' <<<"$data" | column -c 80
+	jq -r '.pops | keys[]' <<<"$data"
 }
 
 # Function to get IP addresses by server
@@ -108,7 +108,7 @@ main() {
 
 	case $1 in
 	--list-servers | -l)
-		list_servers
+		list_servers | column -c 80
 		;;
 	--block | -b)
 		block_ips "$@"
