@@ -14,6 +14,19 @@ To list all available matchmaking servers:
 ./server-picker.sh --list-servers
 ```
 
+Once a ping cache exists (see [Cache server pings](#cache-server-pings)), the list
+is shown as a table sorted by latency, with each server's cached average ping and
+friendly location name:
+
+```
+SERVER   PING(ms)  LOCATION
+------   --------  --------
+par      26        Paris (France)
+fra      34        Frankfurt (Germany)
+sto2     41        Stockholm - Bromma (Sweden)
+...
+```
+
 ### List blocked servers
 
 To list of all currently blocked matchmaking servers:
@@ -35,6 +48,40 @@ For example, to block European servers:
 ```
 ./server-picker.sh --block lhr ams ams4 par fra sto2 vie mad sto waw hel
 ```
+
+### Cache server pings
+
+To measure and cache the average ping to every server, run:
+
+```
+./server-picker.sh --update-cache
+```
+
+This pings every relay of every datacenter in parallel and stores the lowest
+average ping per server in `~/.cache/cs2-server-picker/pings.csv` (one
+`server,avg` line each, e.g. `ams,23`). The cache is reused by `--list-servers`
+and by the ping-based blocking options below.
+
+Note: some datacenters (currently the China pops) do not respond to ICMP and are
+omitted from the cache.
+
+### Block servers by ping
+
+To block every cached server whose average ping is **above** a threshold (in ms):
+
+```
+./server-picker.sh --block-over 100
+```
+
+To block every cached server whose average ping is **below** a threshold (in ms):
+
+```
+./server-picker.sh --block-under 30
+```
+
+If no cache exists yet, one is built automatically before blocking. Servers with
+no cached ping (those that don't respond to ICMP) are never blocked by these
+options; block them explicitly with `--block` if needed.
 
 ### Unblock servers
 
