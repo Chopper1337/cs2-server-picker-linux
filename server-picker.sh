@@ -9,6 +9,8 @@ echo_fmt() {
 	esac
 }
 
+# Local copy of the fetched Steam SDR server data
+DATA_FILE="/tmp/cs2_servers.json"
 # Number of ICMP echo requests to send per relay IP
 PING_COUNT=1
 # How many relays to ping at once
@@ -30,15 +32,15 @@ export PING_COUNT
 # Function to fetch data from the API endpoint, filter out irrelevant data
 fetch_data() {
 	local API_ENDPOINT="https://api.steampowered.com/ISteamApps/GetSDRConfig/v1/?appid=730"
-	curl -s "$API_ENDPOINT" | jq 'del(.success, .certs, .p2p_share_ip, .relay_public_key, .revoked_keys, .typical_pings) | del(.pops.can, .pops.ctu, .pops.eat, .pops.sha, .pops.tsn)' >/tmp/cs2_servers.json
+	curl -s "$API_ENDPOINT" | jq 'del(.success, .certs, .p2p_share_ip, .relay_public_key, .revoked_keys, .typical_pings) | del(.pops.can, .pops.ctu, .pops.eat, .pops.sha, .pops.tsn)' >"$DATA_FILE"
 }
 
 read_data() {
-	[[ ! -f /tmp/cs2_servers.json ]] && {
+	[[ ! -f "$DATA_FILE" ]] && {
 		echo_fmt "e" "Data file not found."
 		exit 1
 	}
-	cat /tmp/cs2_servers.json
+	cat "$DATA_FILE"
 }
 
 # Ping every relay of every server in parallel and cache the lowest average
